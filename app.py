@@ -98,25 +98,30 @@ def task():
     model = session.get('model', None)
     if request.method == 'POST':
         task=request.form['task']
-        if model == 1:
-            model = DCT_Watermark()
-        elif model == 2:
-            model = DWT_Watermark()
         if task == 'embedding':
-            emb_img = model.embed(img, wm)
+            if model == 1:
+                model = DCT_Watermark()
+            elif model == 2:
+                model = DWT_Watermark()
+            if task == 'embedding':
+                emb_img = model.embed(img, wm)
+            elif task == 'extracting':
+                emb_img = model.embed(img, wm)
+            model = session.get('model', None)
+            
+            if os.path.isfile("static/assets/embedded.jpg"):
+                os.remove("static/assets/embedded.jpg") 
+
+            
+            
+            cv2.imwrite("static/assets/embedded.jpg", emb_img)
+            print("Embedded to {}".format("static/assets/embedded.jpg"))
+
+            return redirect(url_for('attack'))
+        
         elif task == 'extracting':
-            emb_img = model.embed(img, wm)
-        model = session.get('model', None)
-        
-        if os.path.isfile("static/assets/embedded.jpg"):
-            os.remove("static/assets/embedded.jpg") 
 
-        
-        
-        cv2.imwrite("static/assets/embedded.jpg", emb_img)
-        print("Embedded to {}".format("static/assets/embedded.jpg"))
-
-        return redirect(url_for('attack'))
+            return redirect(url_for('extract'))
         
     return render_template('task.html')
 
@@ -147,6 +152,8 @@ def attack():
         if(attack == 'blur'):
             att_img = Attack.blur(em)
             cv2.imwrite("static/assets/attacked.jpg", att_img)
+        elif(attack == 'no-attack'):
+            cv2.imwrite("static/assets/attacked.jpg", img)
         elif(attack == 'rotate180'):
             att_img = Attack.rotate180(em)
             cv2.imwrite("static/assets/attacked.jpg", att_img)
@@ -184,8 +191,12 @@ def attack():
             att_img = Attack.smallersize(em)
             cv2.imwrite("static/assets/attacked.jpg", att_img)
 
+
         print(attack)
         return redirect(url_for('extract'))
+        
+        if os.path.isfile("static/assets/attacked.jpg"):
+                os.remove("static/assets/attacked.jpg")
 
     return render_template('attack.html')
 
@@ -198,18 +209,72 @@ def attack():
  |_____/_/\_\\__|_|  \__,_|\___|\__| |_| \_\___/ \__,_|\__\___|
                                                                
 """
+signature = black_box()
 @application.route('/extract',methods=['GET', 'POST'])
 def extract():
+    if os.path.isfile("static/assets/cover.jpg") and os.path.isfile("static/assets/watermark.jpg"):
+        img = cv2.imread("static/assets/cover.jpg")
+        wm = cv2.imread("static/assets/watermark.jpg", cv2.IMREAD_GRAYSCALE)
+        em = cv2.imread("static/assets/embedded.jpg")
+        at = cv2.imread("static/assets/attacked.jpg")
+    else:
+        return redirect(url_for('error_page'))
+    model = session.get('model', None)
+    if request.method == 'POST':
+        filepath = "NOT FOUND"
+        global orig_name
+       
+        
+        if os.path.isfile("static/assets/signature.jpg"):
+            os.remove("static/assets/signature.jpg") 
+        model = session.get('model', None)
+        if model == 1:
+            model = DCT_Watermark()
+        elif model == 2:
+            model = DWT_Watermark()
 
+        task=request.form['task']
+        if task == 'extract':
+            signature = model.extract(img)
+
+
+
+
+        elif model == 'attack':
+            return redirect(url_for('attack'))
+        
+        
+
+
+        
+        
+        cv2.imwrite("static/assets/signature.jpg", signature)
+        print("Embedded to {}".format("static/assets/signature.jpg"))
+
+        return redirect(url_for('signature'))
+        if os.path.isfile("static/assets/signature.jpg"):
+                os.remove("static/assets/signature.jpg")
     return render_template('extract.html')
 
 
+"""
+  ____  _                   _                    ____             _       
+ / ___|(_) __ _ _ __   __ _| |_ _   _ _ __ ___  |  _ \ ___  _   _| |_ ___ 
+ \___ \| |/ _` | '_ \ / _` | __| | | | '__/ _ \ | |_) / _ \| | | | __/ _ \
+  ___) | | (_| | | | | (_| | |_| |_| | | |  __/ |  _ < (_) | |_| | ||  __/
+ |____/|_|\__, |_| |_|\__,_|\__|\__,_|_|  \___| |_| \_\___/ \__,_|\__\___|
+          |___/                                                           
+"""
+@application.route('/signature', methods=['GET', 'POST'])
+def signature():
 
+    return render_template('signature.html')
 
 
                                                        
 @application.route('/error_page', methods=['GET', 'POST'])
 def error_page():
+    
     return render_template('error_page.html')
 
 if __name__ == '__main__':

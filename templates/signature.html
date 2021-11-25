@@ -25,42 +25,30 @@
     <br>
     <div class="desc">
         <p>
-            Image Embedded Successfully
+            Image Extracted Successfully
         </p>
     </div>
-
+<!-- 
      <form action="" method="post" enctype="multipart/form-data">
         <div class='main'>
             <div class="inputs">
                     <div class="number">
                     </div>
-                    <select name="attack" id="attack" method="post"  action="/attack" required>
+                    <select name="task" id="task" method="post"  action="/extract" required>
                         <option value="" disabled selected hidden>Choose Target Attack</option>
                         
-                        <option value="no-attack">no attack</option>
-                        <option value="blur">blur</option>
-                        <option value="rotate180">rotate180</option>
-                        <option value="rotate90">rotate90</option>
-                        <option value="chop5">chop5</option>
-                        <option value="chop10">chop10</option>
-                        <option value="chop30">chop30</option>
-                        <option value="saltnoise">saltnoise</option>
-                        <option value="randline">randline</option>
-                        <option value="cover">cover</option>
-                        <option value="brighter10">brighter10</option>
-                        <option value="darker10">darker10</option>
-                        <option value="largersize">largersize</option>
-                        <option value="smallersize">smallersize</option>
-
+                        <option value="extract">Extract</option>
+                        <option value="attack">Attack</option>
+                    
                     </select>
             </div>
             <div class="inputs">
                 <input type="submit" value="Submit" class="submit">
             </div>
         </div>
-     </form> 
-     <h2>Uploaded Embedded Image</h2>
-     <img class = "img" src="{{url_for('static', filename='assets/embedded.jpg')}}" style="
+     </form>  -->
+     <h2>Extracted Signature Image</h2>
+     <img class = "img" src="{{url_for('static', filename='assets/signature.jpg')}}" style="
      width: 500px;"  align='middle'/>
      
      <!--Make a try now button which loads a csv-->
