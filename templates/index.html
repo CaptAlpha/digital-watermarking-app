@@ -9,15 +9,18 @@
     <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=DM Sans' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="..\static\css\style.css">
     <link rel="icon" href="..\static\icon.ico">       
     <title>Digital Watermarking</title> 
 </head>
 
 <body>
+ 
+     
     <br>
     <div class="header">
-    <h1 class='heading'>Digital Watermarking</h1>
+    <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Digital Watermarking</h1>
     <br>
     </div>
     
@@ -36,11 +39,14 @@
                     <input type="file" name="cover" class="input" required="required">
                     <input type="file" name="watermark" class="input" required="required">
             </div>
-            <select name="type" id="type" required>
+            <select name="type" class="px-4 py-3 rounded-full" id="type" required>
                 <option value="" disabled selected hidden>Choose Algorithm Type</option>
                 <option value="DCT">DCT</option>
                 <option value="DWT">DWT</option>
             </select>
+
+            
+
             <div class="inputs">
                 <input type="submit" value="Submit" class="submit">
             </div>
