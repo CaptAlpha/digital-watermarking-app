@@ -269,6 +269,7 @@ def extract():
 def signature():
 
     return render_template('signature.html')
+    
 
 
                                                        
